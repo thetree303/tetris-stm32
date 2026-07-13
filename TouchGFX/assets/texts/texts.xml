@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="texts.xsd" Version="4.26.1">
+  <Languages>
+    <Language Id="GB" />
+  </Languages>
+  <Texts>
+    <TextGroup Id="Group1" />
+    <TextGroup Id="Unsorted">
+      <Text Id="GO_SCORE_WILDCARD" Alignment="Left" TypographyId="Typography1">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="SCORE_WILDCARD" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_QQQX" Alignment="Left" TypographyId="Typography1">
+        <Translation Language="GB">0</Translation>
+      </Text>
+      <Text Id="__SingleUse_Y7XG" Alignment="Left" TypographyId="Typography1">
+        <Translation Language="GB">10000</Translation>
+      </Text>
+      <Text Id="__SingleUse_RYDA" Alignment="Left" TypographyId="Small">
+        <Translation Language="GB">HIGH SCORE:</Translation>
+      </Text>
+      <Text Id="__SingleUse_RPD8" Alignment="Left" TypographyId="Small">
+        <Translation Language="GB">YOUR SCORE:</Translation>
+      </Text>
+      <Text Id="__SingleUse_PRB5" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">REPLAY</Translation>
+      </Text>
+      <Text Id="__SingleUse_9JSD" Alignment="Center" TypographyId="Small">
+        <Translation Language="GB">NEXT&#10;BLOCK</Translation>
+      </Text>
+      <Text Id="__SingleUse_G3E0" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">0</Translation>
+      </Text>
+      <Text Id="__SingleUse_70C4" Alignment="Center" TypographyId="Small">
+        <Translation Language="GB">HIGH&#10;SCORE</Translation>
+      </Text>
+      <Text Id="__SingleUse_KT3B" Alignment="Center" TypographyId="Default">
+        <Translation Language="GB">100000</Translation>
+      </Text>
+      <Text Id="__SingleUse_A7S6" Alignment="Center" TypographyId="Small">
+        <Translation Language="GB">SCORE</Translation>
+      </Text>
+    </TextGroup>
+  </Texts>
+  <Typographies>
+    <Typography Id="Default" Font="impact.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9" />
+    <Typography Id="Large" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="Small" Font="impact.ttf" Size="14" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
+    <Typography Id="Typography1" Font="impact.ttf" Size="14" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9" />
+  </Typographies>
+</TextDatabase>

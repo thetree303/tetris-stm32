@@ -1,0 +1,438 @@
+{
+  "Application": {
+    "Screens": [
+      {
+        "Name": "HomeScreen",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "background",
+            "Width": 240,
+            "Height": 321,
+            "LockPosition": true,
+            "RelativeFilename": "home_screen.png"
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "start_button",
+            "X": 80,
+            "Y": 174,
+            "Width": 81,
+            "Height": 30,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "ImageButtonStyle"
+              }
+            ]
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "start_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "East",
+              "ActionComponent": "PlayScreen"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "PlayScreen",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "background",
+            "Width": 240,
+            "Height": 321,
+            "LockPosition": true,
+            "RelativeFilename": "background_3.png"
+          },
+          {
+            "Type": "Container",
+            "Name": "board_container",
+            "X": 26,
+            "Y": 37,
+            "Width": 120,
+            "Height": 240,
+            "Components": []
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "home_button",
+            "X": 168,
+            "Y": 241,
+            "Width": 54,
+            "Height": 44,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "ImageButtonStyle"
+              }
+            ]
+          },
+          {
+            "Type": "Container",
+            "Name": "next_block_container",
+            "X": 176,
+            "Y": 149,
+            "Width": 36,
+            "Height": 36,
+            "Components": []
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_score",
+            "X": 176,
+            "Y": 42,
+            "Width": 37,
+            "Height": 14,
+            "TextId": "__SingleUse_A7S6",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 54,
+              "Green": 242,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_highscore",
+            "X": 176,
+            "Y": 87,
+            "Width": 37,
+            "Height": 28,
+            "TextId": "__SingleUse_70C4",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 54,
+              "Green": 242,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_nextblock",
+            "X": 176,
+            "Y": 191,
+            "Width": 37,
+            "Height": 28,
+            "TextId": "__SingleUse_9JSD",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 54,
+              "Green": 242,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "score",
+            "X": 160,
+            "Y": 58,
+            "Width": 69,
+            "Height": 29,
+            "TextId": "__SingleUse_KT3B",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 154,
+              "Green": 82,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "highscore",
+            "X": 160,
+            "Y": 115,
+            "Width": 69,
+            "Height": 28,
+            "TextId": "__SingleUse_G3E0",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 154,
+              "Green": 82,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "Image",
+            "Name": "block1",
+            "X": 63,
+            "Y": 104,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block1.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "block2",
+            "X": 61,
+            "Y": 137,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block2.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "block3",
+            "X": 76,
+            "Y": 168,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block3.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "block4",
+            "X": 74,
+            "Y": 198,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block4.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "block5",
+            "X": 74,
+            "Y": 195,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block5.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "block6",
+            "X": 87,
+            "Y": 229,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block6.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "block7",
+            "X": 97,
+            "Y": 197,
+            "Width": 12,
+            "Height": 12,
+            "Visible": false,
+            "RelativeFilename": "block7.png"
+          },
+          {
+            "Type": "Image",
+            "Name": "game_over",
+            "Y": -1,
+            "Width": 240,
+            "Height": 321,
+            "Visible": false,
+            "LockPosition": true,
+            "RelativeFilename": "game_over.png"
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "replay_button",
+            "X": 72,
+            "Y": 236,
+            "Width": 96,
+            "Height": 24,
+            "Visible": false,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "TextButtonStyle",
+                "TextId": "__SingleUse_PRB5",
+                "TextRotation": "0",
+                "ColorReleased": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                },
+                "ColorPressed": {
+                  "Red": 255,
+                  "Green": 255,
+                  "Blue": 255
+                }
+              },
+              {
+                "Type": "ImageButtonStyle"
+              }
+            ]
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_go_ys",
+            "X": 67,
+            "Y": 170,
+            "Width": 73,
+            "Height": 14,
+            "Visible": false,
+            "TextId": "__SingleUse_RPD8",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "go_ys",
+            "X": 144,
+            "Y": 170,
+            "Width": 42,
+            "Height": 20,
+            "Visible": false,
+            "TextId": "__SingleUse_Y7XG",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_go_hs",
+            "X": 67,
+            "Y": 189,
+            "Width": 70,
+            "Height": 14,
+            "Visible": false,
+            "TextId": "__SingleUse_RYDA",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "go_hs",
+            "X": 141,
+            "Y": 189,
+            "Width": 42,
+            "Height": 18,
+            "Visible": false,
+            "TextId": "__SingleUse_QQQX",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            }
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "home_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionDirection": "West",
+              "ActionComponent": "HomeScreen"
+            }
+          },
+          {
+            "InteractionName": "Interaction2",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "replay_button"
+            },
+            "Action": {
+              "Type": "ActionCustom",
+              "FunctionName": "replayGameClicked"
+            }
+          }
+        ]
+      }
+    ],
+    "CustomContainerDefinitions": [],
+    "Name": "Tetris",
+    "Resolution": {
+      "Width": 240,
+      "Height": 320
+    },
+    "SelectedColorDepth": 16,
+    "StartupScreenName": "HomeScreen",
+    "SelectedStartupLanguage": "GB",
+    "TouchGfxPath": "../Middlewares/ST/touchgfx",
+    "UIPath": ".",
+    "AvailableColorDepths": [
+      16
+    ],
+    "AvailableLCDs": {
+      "16": "LCD16bpp"
+    },
+    "AvailableSections": [
+      "ExtFlashSection",
+      "IntFlashSection"
+    ],
+    "AvailableResolutions": [
+      {
+        "Width": 240,
+        "Height": 320
+      }
+    ],
+    "PhysicalButtons": [],
+    "FrameworkFeatures": {
+      "LCD16bpp": {
+        "Id": "LCD16bpp",
+        "IsEnabled": true
+      }
+    },
+    "GenerateAssetsCommand": "make -f simulator/gcc/Makefile assets -j8",
+    "PostGenerateCommand": "touchgfx update_project --project-file=simulator/msvs/Application.vcxproj",
+    "PostGenerateTargetCommand": "touchgfx update_project",
+    "CompileSimulatorCommand": "make -f simulator/gcc/Makefile -j8",
+    "RunSimulatorCommand": "build\\bin\\simulator.exe",
+    "CompileTargetCommandOverride": "make -f ../gcc/Makefile -j8",
+    "FlashTargetCommandOverride": "make -f ../gcc/Makefile flash",
+    "LandscapeSkinX": 0,
+    "LandscapeSkinY": 0,
+    "PortraitSkinX": 0,
+    "PortraitSkinY": 0,
+    "DisplayOrientation": "Portrait",
+    "Family": "STM32F4",
+    "SubFamily": "STM32F429/439",
+    "Toolchain": "CMake",
+    "Platform": "m4",
+    "ProjectFile": "../STM32F429I_DISCO_REV_D01.ioc",
+    "OptionalComponentsRoot": "../Middlewares/ST/touchgfx_components",
+    "OptionalComponents": [],
+    "AdditionalFeatures": [
+      "CWRVector",
+      "VectorFonts"
+    ]
+  },
+  "Version": "4.26.1",
+  "CreatedBy": "4.26.1"
+}

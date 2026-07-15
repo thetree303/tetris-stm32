@@ -8,17 +8,30 @@
 extern "C" {
 #endif
 
-#define AUDIO_SAMPLE_RATE 48000
+#define AUDIO_SAMPLE_RATE 16000
 #define AUDIO_BUFFER_SIZE 1024
 
-void Audio_Init(void);
-void Audio_Play(const uint16_t *buffer, size_t size);
-void Audio_Stop(void);
-uint8_t Audio_IsPlaying(void);
-void Audio_I2S_TxCpltCallback(void);
+typedef enum {
+  SFX_BGM,
+  SFX_MOVE,
+  SFX_ROTATE,
+  SFX_ROW_CLEAR,
+  SFX_ROW_CLEAR_4,
+  SFX_GAME_OVER,
+  SFX_COUNT
+} SFX_ID;
 
-void Audio_PlayTone(uint16_t frequency_hz, uint16_t duration_ms);
-void Audio_PlaySine(uint16_t frequency_hz);
+void Audio_Init(void);
+void Audio_StopAll(void);
+
+void Audio_PlaySFX(SFX_ID id);
+uint8_t Audio_IsSFXPlaying(void);
+
+void Audio_StartBGM(void);
+void Audio_StopBGM(void);
+uint8_t Audio_IsBGMPlaying(void);
+
+void Audio_I2S_TxCpltCallback(void);
 
 #ifdef __cplusplus
 }

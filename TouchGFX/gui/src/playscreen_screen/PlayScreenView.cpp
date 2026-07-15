@@ -1,5 +1,6 @@
 #include <gui/playscreen_screen/PlayScreenView.hpp>
 #include "stm32f4xx_hal.h"
+#include "audio.h"
 #include <images/BitmapDatabase.hpp>
 #include <touchgfx/Unicode.hpp>
 #include <touchgfx/Color.hpp>
@@ -233,6 +234,9 @@ void PlayScreenView::startGame()
 
     // Vẽ lại bảng
     updateBoardUI();
+
+    Audio_StopAll();
+    Audio_StartBGM();
 }
 
 // Game Loop chính (~ 60 fps)
@@ -421,6 +425,11 @@ void PlayScreenView::checkAndClearLines()
     static const int SCORE_TABLE[5] = {0, 100, 300, 500, 800};
     if (linesCleared > 0 && linesCleared <= 4)
     {
+        if (linesCleared == 4)
+            Audio_PlaySFX(SFX_ROW_CLEAR_4);
+        else
+            Audio_PlaySFX(SFX_ROW_CLEAR);
+
         currentScore += SCORE_TABLE[linesCleared];
 
         // Cập nhật highScore nếu vượt qua
@@ -449,6 +458,7 @@ void PlayScreenView::movePiece(int deltaX, int deltaY)
         currentPiece.x = newX;
         currentPiece.y = newY;
         updateBoardUI();
+        if (deltaX != 0) Audio_PlaySFX(SFX_MOVE);
     }
     else if (deltaY > 0)
     {
@@ -478,6 +488,7 @@ void PlayScreenView::rotatePiece()
                 currentPiece.shape[r][c] = rotated[r][c];
 
         updateBoardUI();
+        Audio_PlaySFX(SFX_ROTATE);
         return;
     }
 
@@ -490,6 +501,7 @@ void PlayScreenView::rotatePiece()
             for (int c = 0; c < 4; ++c)
                 currentPiece.shape[r][c] = rotated[r][c];
         updateBoardUI();
+        Audio_PlaySFX(SFX_ROTATE);
         return;
     }
 
@@ -501,6 +513,7 @@ void PlayScreenView::rotatePiece()
             for (int c = 0; c < 4; ++c)
                 currentPiece.shape[r][c] = rotated[r][c];
         updateBoardUI();
+        Audio_PlaySFX(SFX_ROTATE);
         return;
     }
     // Không thể xoay => bỏ qua
@@ -577,6 +590,8 @@ void PlayScreenView::updateScoreUI()
 // Hiện overlay Game Over và cập nhật điểm số thua
 void PlayScreenView::showGameOver()
 {
+    Audio_StopBGM();
+    Audio_PlaySFX(SFX_GAME_OVER);
     // Lưu điểm số cao nhất vào Presenter để lưu vào Model 
     presenter->saveHighScore(highScore);
 

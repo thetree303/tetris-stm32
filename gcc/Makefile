@@ -221,7 +221,8 @@ source_files := $(call find, $(source_paths),*.cpp)
 
 board_c_files += \
     $(Drivers_path)/BSP/Components/stmpe811/stmpe811.c \
-    $(Drivers_path)/BSP/Components/ili9341/ili9341.c
+    $(Drivers_path)/BSP/Components/ili9341/ili9341.c \
+    $(Drivers_path)/BSP/Components/cs43l22/cs43l22.c
 
 board_cpp_files :=
 

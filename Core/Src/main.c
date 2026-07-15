@@ -26,6 +26,7 @@
 /* USER CODE BEGIN Includes */
 #include "Components/ili9341/ili9341.h"
 #include "audio.h"
+#include "Components/cs43l22/cs43l22.h"
 #include <stdio.h>
 #include <string.h>
 /* USER CODE END Includes */
@@ -285,6 +286,13 @@ int main(void)
   MX_DMA_Init();
   MX_CRC_Init();
   MX_I2C3_Init();
+
+  /* Initialize CS43L22 Audio Codec */
+  if (CS43L22_Init(&hi2c3, CS43L22_ADDR, 16000, 16) != CS43L22_OK)
+  {
+    Error_Handler();
+  }
+
   MX_SPI5_Init();
   MX_FMC_Init();
   MX_LTDC_Init();

@@ -25,6 +25,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Components/ili9341/ili9341.h"
+#include "audio.h"
 #include <stdio.h>
 #include <string.h>
 /* USER CODE END Includes */
@@ -87,6 +88,9 @@ UART_HandleTypeDef huart1;
 
 SDRAM_HandleTypeDef hsdram1;
 
+I2S_HandleTypeDef hi2s3;
+DMA_HandleTypeDef hdma_i2s3_tx;
+
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
@@ -115,6 +119,8 @@ static void MX_FMC_Init(void);
 static void MX_LTDC_Init(void);
 static void MX_DMA2D_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_DMA_Init(void);
+static void MX_I2S3_Init(void);
 void StartDefaultTask(void *argument);
 extern void TouchGFX_Task(void *argument);
 
@@ -279,6 +285,8 @@ int main(void) {
   MX_LTDC_Init();
   MX_DMA2D_Init();
   MX_USART1_UART_Init();
+  MX_DMA_Init();
+  MX_I2S3_Init();
   MX_TouchGFX_Init();
   /* Call PreOsInit function */
   MX_TouchGFX_PreOSInit();
@@ -380,6 +388,14 @@ void SystemClock_Config(void) {
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
 
   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK) {
+    Error_Handler();
+  }
+
+  RCC_PeriphCLKInitTypeDef PeriphClkInitStruct = {0};
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2S;
+  PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
+  PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
+  if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK) {
     Error_Handler();
   }
 }
@@ -731,10 +747,26 @@ static void MX_GPIO_Init(void) {
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pins : PC10 (I2S3_CK) AF6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_10;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
   /*Configure GPIO pins : BTN_LEFT_Pin BTN_RIGHT_Pin */
   GPIO_InitStruct.Pin = BTN_LEFT_Pin | BTN_RIGHT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PB15 (I2S3_SD) AF5 */
+  GPIO_InitStruct.Pin = GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF5_SPI3;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PD12 PD13 */
@@ -750,8 +782,61 @@ static void MX_GPIO_Init(void) {
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PA15 (I2S3_WS) AF6 */
+  GPIO_InitStruct.Pin = GPIO_PIN_15;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+  GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   /* USER CODE END MX_GPIO_Init_2 */
+}
+
+static void MX_DMA_Init(void) {
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  hdma_i2s3_tx.Instance = DMA1_Stream5;
+  hdma_i2s3_tx.Init.Channel = DMA_CHANNEL_0;
+  hdma_i2s3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
+  hdma_i2s3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
+  hdma_i2s3_tx.Init.MemInc = DMA_MINC_ENABLE;
+  hdma_i2s3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+  hdma_i2s3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+  hdma_i2s3_tx.Init.Mode = DMA_NORMAL;
+  hdma_i2s3_tx.Init.Priority = DMA_PRIORITY_HIGH;
+  hdma_i2s3_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+  if (HAL_DMA_Init(&hdma_i2s3_tx) != HAL_OK) {
+    Error_Handler();
+  }
+
+  __HAL_LINKDMA(&hi2s3, hdmatx, hdma_i2s3_tx);
+
+  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
+}
+
+static void MX_I2S3_Init(void) {
+  hi2s3.Instance = SPI3;
+  hi2s3.Init.Mode = I2S_MODE_MASTER_TX;
+  hi2s3.Init.Standard = I2S_STANDARD_PHILIPS;
+  hi2s3.Init.DataFormat = I2S_DATAFORMAT_16B;
+  hi2s3.Init.MCLKOutput = I2S_MCLKOUTPUT_DISABLE;
+  hi2s3.Init.AudioFreq = I2S_AUDIOFREQ_48K;
+  hi2s3.Init.CPOL = I2S_CPOL_LOW;
+  hi2s3.Init.ClockSource = I2S_CLOCK_PLL;
+  hi2s3.Init.FirstBit = I2S_FIRSTBIT_MSB;
+  if (HAL_I2S_Init(&hi2s3) != HAL_OK) {
+    Error_Handler();
+  }
+}
+
+void HAL_I2S_TxCpltCallback(I2S_HandleTypeDef *hi2s) {
+  if (hi2s->Instance == SPI3) {
+    extern void Audio_I2S_TxCpltCallback(void);
+    Audio_I2S_TxCpltCallback();
+  }
 }
 
 /* USER CODE BEGIN 4 */
@@ -1151,7 +1236,7 @@ void LCD_Delay(uint32_t Delay) { HAL_Delay(Delay); }
 /* USER CODE END Header_StartDefaultTask */
 void StartDefaultTask(void *argument) {
   /* USER CODE BEGIN 5 */
-  /* Infinite loop */
+  Audio_Init();
   for (;;) {
     osDelay(100);
   }

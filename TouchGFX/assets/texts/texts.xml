@@ -4,13 +4,30 @@
     <Language Id="GB" />
   </Languages>
   <Texts>
-    <TextGroup Id="Group1" />
     <TextGroup Id="Unsorted">
+      <Text Id="MODE_WILDCARD" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB" Alignment="Left">&lt;string&gt;</Translation>
+      </Text>
+      <Text Id="SOUND_WILDCARD" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB" Alignment="Left">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="MUSIC_WILDCARD" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB" Alignment="Left">&lt;value&gt;</Translation>
+      </Text>
       <Text Id="GO_SCORE_WILDCARD" Alignment="Left" TypographyId="Typography1">
         <Translation Language="GB">&lt;value&gt;</Translation>
       </Text>
       <Text Id="SCORE_WILDCARD" Alignment="Center" TypographyId="Default">
         <Translation Language="GB">&lt;value&gt;</Translation>
+      </Text>
+      <Text Id="__SingleUse_HMQ5" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">MODE:</Translation>
+      </Text>
+      <Text Id="__SingleUse_6SAN" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">SOUND:</Translation>
+      </Text>
+      <Text Id="__SingleUse_ISLU" Alignment="Left" TypographyId="Default">
+        <Translation Language="GB">MUSIC:</Translation>
       </Text>
       <Text Id="__SingleUse_QQQX" Alignment="Left" TypographyId="Typography1">
         <Translation Language="GB">0</Translation>
@@ -49,5 +66,6 @@
     <Typography Id="Large" Font="verdana.ttf" Size="40" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
     <Typography Id="Small" Font="impact.ttf" Size="14" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" />
     <Typography Id="Typography1" Font="impact.ttf" Size="14" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacterRanges="0-9" />
+    <Typography Id="Default_Level" Font="impact.ttf" Size="20" Bpp="4" IsVector="no" Direction="LTR" FallbackCharacter="?" WildcardCharacters="E,A,S,Y,M,D,I,U,M,H,R" />
   </Typographies>
 </TextDatabase>

@@ -191,9 +191,15 @@ void PlayScreenView::startGame()
 {
     gameOver     = false;
     tickCounter  = 0;
-    fallInterval = 60;
     currentScore = 0;
     joystickHeld = false; // Reset cờ khi bắt đầu game mới
+
+    // Thiết lập fallInterval ban đầu theo gameMode
+    // EASY=80 ticks (~1.3s), MEDIUM=55 ticks (~0.9s), HARD=35 ticks (~0.6s)
+    int gm = presenter->getGameMode();
+    if      (gm == 2) fallInterval = 35; // HARD
+    else if (gm == 1) fallInterval = 55; // MEDIUM
+    else              fallInterval = 80; // EASY (default)
 
     // Lấy điểm cao nhất từ phiên trước
     highScore = presenter->getHighScore();
@@ -421,8 +427,14 @@ void PlayScreenView::checkAndClearLines()
         }
     }
 
-    // Tính điểm với bảng điểm cổ điển: 1 hàng=100, 2=300, 3=500, 4=800
-    static const int SCORE_TABLE[5] = {0, 100, 300, 500, 800};
+    // Tính điểm theo mode:
+    //   EASY   (0): 1x  -> 1 hàng=100, 2=300, 3=500, 4=800
+    //   MEDIUM (1): 2x  -> 1 hàng=200, 2=600, 3=1000, 4=1600
+    //   HARD   (2): 3x  -> 1 hàng=300, 2=900, 3=1500, 4=2400
+    static const int SCORE_BASE[5] = {0, 100, 300, 500, 800};
+    int gm = presenter->getGameMode();
+    int multiplier = gm + 1; // EASY=1, MEDIUM=2, HARD=3
+
     if (linesCleared > 0 && linesCleared <= 4)
     {
         if (linesCleared == 4)
@@ -430,17 +442,25 @@ void PlayScreenView::checkAndClearLines()
         else
             Audio_PlaySFX(SFX_ROW_CLEAR);
 
-        currentScore += SCORE_TABLE[linesCleared];
+        currentScore += SCORE_BASE[linesCleared] * multiplier;
 
         // Cập nhật highScore nếu vượt qua
         if (currentScore > highScore)
         {
             highScore = currentScore;
-        }   
+        }
 
-        // Tăng tốc rơi mỗi 500 điểm (tối thiểu 20 tick ~ 3 hàng/giây)
-        fallInterval = 60 - (currentScore / 500) * 5;
-        if (fallInterval < 20) fallInterval = 20;
+        // Tăng tốc rơi theo mode:
+        //   EASY:   fallInterval = 80 - (score/600)*5, min=30
+        //   MEDIUM: fallInterval = 55 - (score/500)*5, min=20
+        //   HARD:   fallInterval = 35 - (score/400)*7, min=10
+        int baseInterval, scoreStep, stepSize, minInterval;
+        if (gm == 2)      { baseInterval = 35; scoreStep = 400; stepSize = 7; minInterval = 10; }
+        else if (gm == 1) { baseInterval = 55; scoreStep = 500; stepSize = 5; minInterval = 20; }
+        else              { baseInterval = 80; scoreStep = 600; stepSize = 5; minInterval = 30; }
+
+        fallInterval = baseInterval - (currentScore / scoreStep) * stepSize;
+        if (fallInterval < minInterval) fallInterval = minInterval;
 
         updateScoreUI();
     }

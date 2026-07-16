@@ -8,12 +8,20 @@ extern "C" {
     uint8_t Get_Joystick_Direction(void);
     uint32_t LoadScoreFromFlash(void);
     void SaveScoreToFlash(uint32_t score);
+
+    // Biến âm lượng volatile trong audio.c (extern để đồng bộ)
+    extern volatile uint8_t bgm_volume;
+    extern volatile uint8_t sfx_volume;
 }
 
-Model::Model() : modelListener(0), highScore(LoadScoreFromFlash()) 
+Model::Model() : modelListener(0), highScore(LoadScoreFromFlash()),
+                 bgmVolume(50), sfxVolume(50), gameMode(0)
 {
-
+    // Đồng bộ giá trị mặc định lên audio driver ngay khi khởi tạo
+    bgm_volume = (uint8_t)bgmVolume;
+    sfx_volume = (uint8_t)sfxVolume;
 }
+
 
 // Hàm này được TouchGFX gọi mỗi frame đồ họa (~60 lần/giây).
 void Model::tick()
@@ -65,4 +73,16 @@ void Model::saveHighScore(int score)
 {
     highScore = score;
     SaveScoreToFlash(score);
+}
+
+void Model::setBGMVolume(int vol)
+{
+    bgmVolume = (vol < 0) ? 0 : (vol > 100) ? 100 : vol;
+    bgm_volume = (uint8_t)bgmVolume;
+}
+
+void Model::setSFXVolume(int vol)
+{
+    sfxVolume = (vol < 0) ? 0 : (vol > 100) ? 100 : vol;
+    sfx_volume = (uint8_t)sfxVolume;
 }

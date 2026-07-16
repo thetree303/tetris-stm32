@@ -8,9 +8,8 @@
             "Type": "Image",
             "Name": "background",
             "Width": 240,
-            "Height": 321,
-            "LockPosition": true,
-            "RelativeFilename": "home_screen.png"
+            "Height": 320,
+            "RelativeFilename": "home_screen_2.png"
           },
           {
             "Type": "FlexButton",
@@ -19,6 +18,22 @@
             "Y": 174,
             "Width": 81,
             "Height": 30,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "ImageButtonStyle"
+              }
+            ]
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "settings_button",
+            "X": 63,
+            "Y": 212,
+            "Width": 113,
+            "Height": 34,
             "ButtonTrigger": {
               "Type": "ClickButtonTrigger"
             },
@@ -38,9 +53,149 @@
             },
             "Action": {
               "Type": "ActionGotoScreen",
-              "ScreenTransitionType": "ScreenTransitionSlide",
+              "ScreenTransitionType": "ScreenTransitionWipe",
               "ScreenTransitionDirection": "East",
               "ActionComponent": "PlayScreen"
+            }
+          },
+          {
+            "InteractionName": "Interaction2",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "settings_button"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "SettingScreen"
+            }
+          }
+        ]
+      },
+      {
+        "Name": "SettingScreen",
+        "Components": [
+          {
+            "Type": "Image",
+            "Name": "background",
+            "Y": -1,
+            "Width": 240,
+            "Height": 321,
+            "LockPosition": true,
+            "RelativeFilename": "settings_2.png"
+          },
+          {
+            "Type": "FlexButton",
+            "Name": "flexButton1",
+            "X": 75,
+            "Y": 259,
+            "Width": 90,
+            "Height": 38,
+            "ButtonTrigger": {
+              "Type": "ClickButtonTrigger"
+            },
+            "ButtonStyles": [
+              {
+                "Type": "ImageButtonStyle"
+              }
+            ]
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_music",
+            "X": 49,
+            "Y": 103,
+            "Width": 56,
+            "Height": 22,
+            "TextId": "__SingleUse_ISLU",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_sound",
+            "X": 49,
+            "Y": 133,
+            "Width": 58,
+            "Height": 22,
+            "TextId": "__SingleUse_6SAN",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "text_mode",
+            "X": 49,
+            "Y": 178,
+            "Width": 48,
+            "Height": 22,
+            "TextId": "__SingleUse_HMQ5",
+            "TextRotation": "0",
+            "Color": {
+              "Red": 255,
+              "Green": 255,
+              "Blue": 255
+            },
+            "AutoSize": true
+          },
+          {
+            "Type": "TextArea",
+            "Name": "music",
+            "X": 120,
+            "Y": 103,
+            "Width": 137,
+            "Height": 20,
+            "TextId": "MUSIC_WILDCARD",
+            "TextRotation": "0",
+            "AutoSize": true,
+            "Wildcard1": {}
+          },
+          {
+            "Type": "TextArea",
+            "Name": "sound",
+            "X": 120,
+            "Y": 133,
+            "Width": 66,
+            "Height": 20,
+            "TextId": "SOUND_WILDCARD",
+            "TextRotation": "0",
+            "AutoSize": true,
+            "Wildcard1": {}
+          },
+          {
+            "Type": "TextArea",
+            "Name": "mode",
+            "X": 120,
+            "Y": 178,
+            "Width": 66,
+            "Height": 22,
+            "TextId": "MODE_WILDCARD",
+            "TextRotation": "0",
+            "AutoSize": true,
+            "Wildcard1": {}
+          }
+        ],
+        "Interactions": [
+          {
+            "InteractionName": "Interaction1",
+            "Trigger": {
+              "Type": "TriggerClicked",
+              "TriggerComponent": "flexButton1"
+            },
+            "Action": {
+              "Type": "ActionGotoScreen",
+              "ScreenTransitionType": "ScreenTransitionNone",
+              "ActionComponent": "HomeScreen"
             }
           }
         ]

@@ -48,6 +48,12 @@ public:
      * @param score  Điểm số cao nhất
      */
     void saveHighScore(int score) { model->saveHighScore(score); }
+
+    /**
+     * @brief Lấy chế độ chơi hiện tại từ Model.
+     *        0=EASY, 1=MEDIUM, 2=HARD
+     */
+    int getGameMode() const { return model->getGameMode(); }
     
 private:
     PlayScreenPresenter();

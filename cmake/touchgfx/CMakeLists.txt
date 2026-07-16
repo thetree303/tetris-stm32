@@ -25,6 +25,8 @@ set(TouchGFX_Src
     ${CMAKE_SOURCE_DIR}/TouchGFX/gui/src/model/Model.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/gui/src/playscreen_screen/PlayScreenPresenter.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/gui/src/playscreen_screen/PlayScreenView.cpp
+    ${CMAKE_SOURCE_DIR}/TouchGFX/gui/src/settingscreen_screen/SettingScreenPresenter.cpp
+    ${CMAKE_SOURCE_DIR}/TouchGFX/gui/src/settingscreen_screen/SettingScreenView.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/fonts/src/ApplicationFontProvider.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/fonts/src/CachedFont.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/fonts/src/CompressedFontCache.cpp
@@ -45,6 +47,7 @@ set(TouchGFX_Src
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/gui_generated/src/common/FrontendApplicationBase.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/gui_generated/src/homescreen_screen/HomeScreenViewBase.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/gui_generated/src/playscreen_screen/PlayScreenViewBase.cpp
+    ${CMAKE_SOURCE_DIR}/TouchGFX/generated/gui_generated/src/settingscreen_screen/SettingScreenViewBase.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/BitmapDatabase.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/SVGDatabase.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_background_3.cpp
@@ -63,7 +66,8 @@ set(TouchGFX_Src
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_block7.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_block7_mini.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_game_over.cpp
-    ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_home_screen.cpp
+    ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_home_screen_2.cpp
+    ${CMAKE_SOURCE_DIR}/TouchGFX/generated/images/src/image_settings_2.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/texts/src/LanguageGb.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/texts/src/Texts.cpp
     ${CMAKE_SOURCE_DIR}/TouchGFX/generated/texts/src/TypedTextDatabase.cpp

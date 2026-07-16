@@ -25,7 +25,7 @@ public:
 
     void setBGMVolume(int vol);
     void setSFXVolume(int vol);
-    void setGameMode(int mode) { gameMode  = (mode < 0) ? 0 : (mode > 2)  ? 2  : mode; }
+    void setGameMode(int mode);
 
     void tick();
 protected:
@@ -38,6 +38,8 @@ protected:
     int bgmVolume; // 0-100
     int sfxVolume; // 0-100
     int gameMode;  // 0=EASY, 1=MEDIUM, 2=HARD
+
+    void persistCurrentSettings();
 };
 
 #endif // MODEL_HPP

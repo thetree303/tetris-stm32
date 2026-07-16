@@ -20,21 +20,15 @@ public:
     void onJoystickInput(uint8_t direction);
 
 protected:
-    // --------------------------------------------------------
-    // Chỉ số tùy chọn đang được chọn: 0=BGM, 1=SFX, 2=Mode
-    // --------------------------------------------------------
-    int selectedOption; // 0, 1, 2
+    // Chỉ số tương ứng với tùy chọn đang được chọn: 0=BGM, 1=SFX, 2=Mode
+    int selectedOption;
 
-    // --------------------------------------------------------
     // Wildcard buffers (UTF-16) cho 3 dòng giá trị
-    // --------------------------------------------------------
     touchgfx::Unicode::UnicodeChar bgmBuf[8];  // "0".."100\0"
     touchgfx::Unicode::UnicodeChar sfxBuf[8];  // "0".."100\0"
     touchgfx::Unicode::UnicodeChar modeBuf[8]; // "EASY\0", "MEDIUM\0", "HARD\0"
 
-    // --------------------------------------------------------
     // Cập nhật toàn bộ UI (wildcard text + màu highlight)
-    // --------------------------------------------------------
     void updateSettingsUI();
 };
 

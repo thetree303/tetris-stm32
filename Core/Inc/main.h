@@ -54,7 +54,18 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+// Struct để lưu trữ cấu hình game (điểm cao nhất, âm lượng nhạc nền, âm lượng hiệu ứng, chế độ chơi)
+typedef struct {
+    uint32_t highScore;
+    uint8_t bgmVolume;
+    uint8_t sfxVolume;
+    uint8_t gameMode;
+    uint8_t magic;    // Giá trị magic để xác định tệp cấu hình hợp lệ
+} GameConfig;
 
+// Hàm để tải và lưu cấu hình game từ bộ nhớ flash
+void LoadGameConfig(GameConfig *config);
+void SaveGameConfig(const GameConfig *config);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

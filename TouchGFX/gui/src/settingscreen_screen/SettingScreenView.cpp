@@ -23,8 +23,7 @@ void SettingScreenView::setupScreen()
     sound.setWildcard(sfxBuf);
     mode.setWildcard(modeBuf);
 
-    // Đọc giá trị hiện tại từ Model (qua Presenter)
-    // và cập nhật UI lần đầu
+    // Đọc giá trị hiện tại từ Model (qua Presenter) và cập nhật UI lần đầu
     updateSettingsUI();
 }
 
@@ -57,7 +56,7 @@ void SettingScreenView::onJoystickInput(uint8_t direction)
 
     switch (selectedOption)
     {
-        case 0: // BGM volume
+        case 0: // BGM volume (0-100, bước nhảy 5)
         {
             int vol = presenter->getBGMVolume() + delta * 5;
             if (vol < 0)   vol = 0;
@@ -65,7 +64,7 @@ void SettingScreenView::onJoystickInput(uint8_t direction)
             presenter->setBGMVolume(vol);
             break;
         }
-        case 1: // SFX volume
+        case 1: // SFX volume (0-100, bước nhảy 5)
         {
             int vol = presenter->getSFXVolume() + delta * 5;
             if (vol < 0)   vol = 0;
@@ -93,21 +92,20 @@ void SettingScreenView::onJoystickInput(uint8_t direction)
 // --------------------------------------------------------
 void SettingScreenView::updateSettingsUI()
 {
-    // Yêu cầu TouchGFX xóa vùng hiển thị cũ của các text (trước khi thay đổi nội dung/kích thước).
-    // Điều này ngăn hiện tượng đè chữ khi độ dài chữ mới ngắn hơn chữ cũ (ví dụ: HARDIUM, 000).
+    // Xóa vùng hiển thị cũ của các text (trước khi thay đổi nội dung/kích thước).
     music.invalidate();
     sound.invalidate();
     mode.invalidate();
 
-    // --- Cập nhật giá trị BGM ---
+    // Cập nhật giá trị BGM
     int bgmVal = presenter->getBGMVolume();
     touchgfx::Unicode::snprintf(bgmBuf, 8, "%d", bgmVal);
 
-    // --- Cập nhật giá trị SFX ---
+    // Cập nhật giá trị SFX
     int sfxVal = presenter->getSFXVolume();
     touchgfx::Unicode::snprintf(sfxBuf, 8, "%d", sfxVal);
 
-    // --- Cập nhật tên Mode ---
+    // Cập nhật tên Mode
     // Unicode::fromUTF8 chuyển đổi ASCII/UTF-8 sang Unicode::UnicodeChar (UTF-16)
     // Đây là cách đúng để copy const char* sang wildcard buffer
     int modeIdx = presenter->getGameMode();
@@ -117,9 +115,7 @@ void SettingScreenView::updateSettingsUI()
         8
     );
 
-    // --- Highlight dòng đang được chọn (màu vàng), các dòng còn lại màu TRẮNG ---
-    // Màu highlight: vàng sáng (255, 220, 0)
-    // Màu bình thường: TRẮNG (255, 255, 255) - vì nền ảnh settings màu tối
+    // Highlight màu vàng dòng đang được chọn, các dòng còn lại màu trắng
     touchgfx::colortype normalColor    = touchgfx::Color::getColorFromRGB(255, 255, 255);
     touchgfx::colortype highlightColor = touchgfx::Color::getColorFromRGB(255, 220,   0);
 

@@ -58,7 +58,7 @@
 #define SPI5_TIMEOUT_MAX 0x1000
 
 // Định nghĩa các hằng số liên quan đến Flash để lưu điểm số
-// Thay đổi từ Sector 11 sang Sector 23 (cuối vùng nhớ 2MB Flash) để tránh ghi đè/xóa các ảnh đồ họa (được linker xếp vào Sector 11)
+// Sử dụng Sector 23 (cuối vùng nhớ 2MB Flash) để tránh ghi đè/xóa các ảnh đồ họa (được linker xếp vào Sector 11)
 #define FLASH_USER_START_ADDR 0x081E0000
 #define FLASH_USER_END_ADDR 0x081FFFFF
 #define FLASH_USER_SECTOR FLASH_SECTOR_23
@@ -170,12 +170,14 @@ uint32_t I2c3Timeout =
 uint32_t Spi5Timeout =
     SPI5_TIMEOUT_MAX; /*<! Value of Timeout when SPI communication fails */
 
-// -------------------------------------------------------------
-// LOGIC LƯU ĐIỂM SỐ VĨNH VIỄN VÀO FLASH SECTOR 11 (128KB) CỦA STM32F429ZI
-// -------------------------------------------------------------
+/**
+ * LOGIC LÀM VIỆC VỚI FLASH ĐỂ LƯU TRỮ CẤU HÌNH GAME (ĐIỂM CAO NHẤT, ÂM LƯỢNG, CHẾ ĐỘ CHƠI)
+ */
+// Giá trị magic để xác định tệp cấu hình hợp lệ
+#define FLASH_CONFIG_MAGIC 0x5A
 
-/* Hàm dọn dẹp Sector 11 nếu phát hiện rác */
-void FormatSector11(void) {
+// Hàm xóa trắng Sector 23 (128KB) để chuẩn bị ghi dữ liệu mới
+void FormatConfigSector(void) {
   HAL_FLASH_Unlock();
   FLASH_EraseInitTypeDef EraseInitStruct;
   uint32_t SectorError = 0;
@@ -189,64 +191,93 @@ void FormatSector11(void) {
   HAL_FLASH_Lock();
 }
 
-// Hàm đọc điểm số cuối cùng từ Flash Sector 11
-uint32_t LoadScoreFromFlash(void) {
+// Đọc cấu hình cuối cùng từ Flash
+void LoadGameConfig(GameConfig *config) {
+  // Giá trị mặc định phòng khi Flash trống
+  config->highScore = 0;
+  config->bgmVolume = 50;
+  config->sfxVolume = 50;
+  config->gameMode = 0;
+  config->magic = FLASH_CONFIG_MAGIC;
+
   uint32_t *flash_ptr = (uint32_t *)FLASH_USER_START_ADDR;
-  uint32_t last_score = 0;
+  GameConfig last_valid_config;
+  uint8_t found = 0;
 
-  // Nếu Sector 11 trống hoặc có dữ liệu rác (điểm số > MAX_VALID_SCORE), tiến hành xóa trắng
-  if (*flash_ptr == 0xFFFFFFFF) {
-    return 0;
-  } else if (*flash_ptr > MAX_VALID_SCORE) {
-    FormatSector11();
-    return 0;
-  }
-
-  // Quét qua toàn bộ Sector 11 để tìm điểm số cuối cùng
+  // Quét qua toàn bộ Sector theo từng block 8-bytes (2 Words)
   while (flash_ptr < (uint32_t *)FLASH_USER_END_ADDR) {
-    if (*flash_ptr == 0xFFFFFFFF) {
+    uint32_t w1 = *flash_ptr;
+    uint32_t w2 = *(flash_ptr + 1);
+
+    // Nếu gặp ô trống đầu tiên (0xFFFFFFFF) thì dừng lại
+    if (w1 == 0xFFFFFFFF && w2 == 0xFFFFFFFF) {
       break;
     }
-    last_score = *flash_ptr;
-    flash_ptr++;
+
+    // Giải mã dữ liệu từ 2 Words thành Struct
+    GameConfig temp_config;
+    temp_config.highScore = w1;
+    temp_config.bgmVolume = (uint8_t)(w2 & 0xFF);
+    temp_config.sfxVolume = (uint8_t)((w2 >> 8) & 0xFF);
+    temp_config.gameMode  = (uint8_t)((w2 >> 16) & 0xFF);
+    temp_config.magic     = (uint8_t)((w2 >> 24) & 0xFF);
+
+    // Kiểm tra tính hợp lệ của dữ liệu vừa đọc
+    if (temp_config.magic == FLASH_CONFIG_MAGIC && temp_config.highScore <= MAX_VALID_SCORE) {
+      last_valid_config = temp_config;
+      found = 1;
+    } else {
+      // Phát hiện dữ liệu lỗi/rác -> Format lại Flash
+      FormatConfigSector();
+      return;
+    }
+
+    flash_ptr += 2; // Tăng con trỏ lên 8 bytes (2 Words) để đọc tiếp
   }
 
-  // Nếu điểm số cuối cùng vượt ngưỡng hợp lý, tiến hành xóa trắng
-  if (last_score > MAX_VALID_SCORE) {
-    FormatSector11();
-    return 0;
+  if (found) {
+    *config = last_valid_config;
   }
-
-  return last_score;
 }
 
-// Hàm lưu điểm số mới vào Flash Sector 11
-void SaveScoreToFlash(uint32_t score) {
-  // Nếu điểm số vượt quá giới hạn hợp lý hoặc bằng điểm số cuối cùng, không lưu
-  if (score > MAX_VALID_SCORE || score == LoadScoreFromFlash())
+// Lưu cấu hình mới nối tiếp vào Flash
+void SaveGameConfig(const GameConfig *config) {
+  // Kiểm tra dữ liệu đầu vào hợp lý
+  if (config->highScore > MAX_VALID_SCORE || config->magic != FLASH_CONFIG_MAGIC) {
     return;
+  }
 
+  // Mở khóa Flash để ghi dữ liệu
   HAL_FLASH_Unlock();
 
   uint32_t *flash_ptr = (uint32_t *)FLASH_USER_START_ADDR;
 
-  // Quét qua toàn bộ Sector 11 tìm vị trí trống mới (0xFFFFFFFF) để ghi điểm số mới
+  // Quét tìm vị trí trống tiếp theo (8-bytes trống)
   while (flash_ptr < (uint32_t *)FLASH_USER_END_ADDR) {
-    if (*flash_ptr == 0xFFFFFFFF) {
+    if (*flash_ptr == 0xFFFFFFFF && *(flash_ptr + 1) == 0xFFFFFFFF) {
       break;
     }
-    flash_ptr++;
+    flash_ptr += 2;
   }
 
-  // Nếu đã quét đến cuối Sector (đầy 128KB), tiến hành xóa trắng
-  if (flash_ptr >= (uint32_t *)FLASH_USER_END_ADDR) {
-    FormatSector11();
+  // Nếu Sector đã đầy 128KB, tiến hành xóa trắng và ghi lại từ đầu
+  if (flash_ptr >= (uint32_t *)(FLASH_USER_END_ADDR - 1)) {
+    FormatConfigSector();
     flash_ptr = (uint32_t *)FLASH_USER_START_ADDR;
   }
 
-  // Ghi điểm nối tiếp
-  HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, (uint32_t)flash_ptr, score);
+  // Chuẩn bị dữ liệu ghi dưới dạng 2 Words
+  uint32_t w1 = config->highScore;                      // Word 1: Điểm cao nhất
+  uint32_t w2 = (uint32_t)config->bgmVolume |           // Word 2: BGM Volume (bit 0-7)
+                ((uint32_t)config->sfxVolume << 8) |    // Word 2: SFX Volume (bit 8-15)
+                ((uint32_t)config->gameMode << 16) |    // Word 2: Game Mode (bit 16-23)
+                ((uint32_t)config->magic << 24);        // Word 2: Magic Number (bit 24-31)
 
+  // Ghi lần lượt 2 Word vào Flash
+  HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, (uint32_t)flash_ptr, w1);
+  HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, (uint32_t)(flash_ptr + 1), w2);
+
+  // Khóa Flash sau khi ghi xong
   HAL_FLASH_Lock();
 }
 

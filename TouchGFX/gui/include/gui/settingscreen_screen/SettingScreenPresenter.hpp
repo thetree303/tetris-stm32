@@ -36,9 +36,7 @@ public:
      */
     virtual void joystickMoved(uint8_t direction);
 
-    // --------------------------------------------------------
     // Getters / Setters giao tiếp với Model
-    // --------------------------------------------------------
     int  getBGMVolume() const { return model->getBGMVolume(); }
     int  getSFXVolume() const { return model->getSFXVolume(); }
     int  getGameMode()  const { return model->getGameMode();  }

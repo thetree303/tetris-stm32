@@ -235,7 +235,7 @@ void PlayScreenView::startGame()
     // Vẽ lại bảng
     updateBoardUI();
 
-    Audio_StopAll();
+    Audio_StopSFX();
     Audio_StartBGM();
 }
 

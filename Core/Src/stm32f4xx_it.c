@@ -63,7 +63,6 @@ extern LTDC_HandleTypeDef hltdc;
 extern TIM_HandleTypeDef htim6;
 
 /* USER CODE BEGIN EV */
-extern DMA_HandleTypeDef hdma_i2s3_tx;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -232,9 +231,6 @@ void DMA2D_IRQHandler(void)
   /* USER CODE END DMA2D_IRQn 1 */
 }
 
-void DMA1_Stream5_IRQHandler(void) {
-  HAL_DMA_IRQHandler(&hdma_i2s3_tx);
-}
 
 /* USER CODE BEGIN 1 */
 

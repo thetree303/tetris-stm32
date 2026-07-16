@@ -21,8 +21,12 @@ typedef enum {
   SFX_COUNT
 } SFX_ID;
 
+extern volatile uint8_t bgm_volume;
+extern volatile uint8_t sfx_volume;
+
 void Audio_Init(void);
 void Audio_StopAll(void);
+void Audio_StopSFX(void);
 
 void Audio_PlaySFX(SFX_ID id);
 uint8_t Audio_IsSFXPlaying(void);

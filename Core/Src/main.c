@@ -58,9 +58,10 @@
 #define SPI5_TIMEOUT_MAX 0x1000
 
 // Định nghĩa các hằng số liên quan đến Flash để lưu điểm số
-#define FLASH_USER_START_ADDR 0x080E0000
-#define FLASH_USER_END_ADDR 0x080FFFFF
-#define FLASH_USER_SECTOR FLASH_SECTOR_11
+// Thay đổi từ Sector 11 sang Sector 23 (cuối vùng nhớ 2MB Flash) để tránh ghi đè/xóa các ảnh đồ họa (được linker xếp vào Sector 11)
+#define FLASH_USER_START_ADDR 0x081E0000
+#define FLASH_USER_END_ADDR 0x081FFFFF
+#define FLASH_USER_SECTOR FLASH_SECTOR_23
 #define MAX_VALID_SCORE 999999 // Giới hạn điểm số
 
 // Các hằng số thời gian cho cơ chế điều khiển Joystick (đơn vị ms)
@@ -91,9 +92,6 @@ SPI_HandleTypeDef hspi5;
 UART_HandleTypeDef huart1;
 
 SDRAM_HandleTypeDef hsdram1;
-
-I2S_HandleTypeDef hi2s3;
-DMA_HandleTypeDef hdma_i2s3_tx;
 
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -877,51 +875,6 @@ static void MX_GPIO_Init(void)
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
   /* USER CODE END MX_GPIO_Init_2 */
-}
-
-static void MX_DMA_Init(void) {
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  hdma_i2s3_tx.Instance = DMA1_Stream5;
-  hdma_i2s3_tx.Init.Channel = DMA_CHANNEL_0;
-  hdma_i2s3_tx.Init.Direction = DMA_MEMORY_TO_PERIPH;
-  hdma_i2s3_tx.Init.PeriphInc = DMA_PINC_DISABLE;
-  hdma_i2s3_tx.Init.MemInc = DMA_MINC_ENABLE;
-  hdma_i2s3_tx.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-  hdma_i2s3_tx.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-  hdma_i2s3_tx.Init.Mode = DMA_NORMAL;
-  hdma_i2s3_tx.Init.Priority = DMA_PRIORITY_HIGH;
-  hdma_i2s3_tx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-  if (HAL_DMA_Init(&hdma_i2s3_tx) != HAL_OK) {
-    Error_Handler();
-  }
-
-  __HAL_LINKDMA(&hi2s3, hdmatx, hdma_i2s3_tx);
-
-  HAL_NVIC_SetPriority(DMA1_Stream5_IRQn, 5, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream5_IRQn);
-}
-
-static void MX_I2S3_Init(void) {
-  hi2s3.Instance = SPI3;
-  hi2s3.Init.Mode = I2S_MODE_MASTER_TX;
-  hi2s3.Init.Standard = I2S_STANDARD_PHILIPS;
-  hi2s3.Init.DataFormat = I2S_DATAFORMAT_16B;
-  hi2s3.Init.MCLKOutput = I2S_MCLKOUTPUT_DISABLE;
-  hi2s3.Init.AudioFreq = I2S_AUDIOFREQ_16K;
-  hi2s3.Init.CPOL = I2S_CPOL_LOW;
-  hi2s3.Init.ClockSource = I2S_CLOCK_PLL;
-  hi2s3.Init.FirstBit = I2S_FIRSTBIT_MSB;
-  if (HAL_I2S_Init(&hi2s3) != HAL_OK) {
-    Error_Handler();
-  }
-}
-
-void HAL_I2S_TxCpltCallback(I2S_HandleTypeDef *hi2s) {
-  if (hi2s->Instance == SPI3) {
-    extern void Audio_I2S_TxCpltCallback(void);
-    Audio_I2S_TxCpltCallback();
-  }
 }
 
 /* USER CODE BEGIN 4 */
